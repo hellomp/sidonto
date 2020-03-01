@@ -23,11 +23,10 @@
           dark
           dense
           standout
-          style="width:100%"
-          class="q-mx-md"
           v-model="search"
           placeholder="Procurar paciente"
           v-if="$store.state.searchActive"
+          id="search-bar"
         >
           <template v-slot:prepend>
             <q-icon
@@ -78,5 +77,19 @@ export default {
 .q-page-container{
   width: 75%;
   margin: 0 auto;
+}
+.q-field {
+    width: 100%;
+    margin: 0 1rem;
+  }
+@media only screen and (max-width: 768px) {
+  .q-page-container{
+    width: 100%;
+    margin: 0;
+  }
+.q-field {
+    width: 100%;
+    margin: 0;
+  }
 }
 </style>
