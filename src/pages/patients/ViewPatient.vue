@@ -194,7 +194,7 @@
                 </div>
               </td>
            </tr>
-            <tr v-else v-for="treatment in patient.treatments" v-bind:key="treatment.id">
+            <tr v-else v-for="treatment in patient.treatments" v-bind:key="treatment.id" @click="viewTreatment(treatment.id)">
               <td class="text-left">{{treatment.discipline}}</td>
               <td class="text-left">{{treatment.student1}}/{{treatment.student2}}</td>
               <td class="text-right">{{treatment.date}}</td>
@@ -236,7 +236,8 @@
                 </div>
               </td>
            </tr>
-          <tr v-else v-for="exam in patient.exams" v-bind:key="exam.description">            <td class="text-left">{{exam.description}}</td>
+          <tr v-else v-for="exam in patient.exams" v-bind:key="exam.id" @click="viewExam(exam.id)">
+            <td class="text-left">{{exam.description}}</td>
             <td class="text-right">{{exam.date}}</td>
           </tr>
         </tbody>
@@ -360,6 +361,117 @@
     </q-dialog>
 
     <q-dialog
+      v-model="viewTreatmentDialog"
+      :maximized="!$q.screen.gt.xs"
+      transition-show="slide-up"
+      transition-hide="slide-down"
+    >
+      <q-card>
+        <q-form>
+        <q-card-section>
+          <div class="row q-col-gutter-sm">
+            <div class="col-sm-6 col-xs-12">
+              <q-input
+                readonly
+                outlined
+                label="Aluno Cirurgião"
+                v-if="patient.treatments[actualTreatment] != undefined"
+                v-model="patient.treatments[actualTreatment].student1"
+              />
+            </div>
+            <div class="col-sm-6 col-xs-12">
+              <q-input
+                readonly
+                outlined
+                label="Aluno Auxiliar"
+                v-if="patient.treatments[actualTreatment] != undefined"
+                v-model="patient.treatments[actualTreatment].student2"
+              />
+            </div>
+            <div class="col-xs-12">
+              <q-input
+                readonly
+                outlined
+                label="Professor"
+                v-if="patient.treatments[actualTreatment] != undefined"
+                v-model="patient.treatments[actualTreatment].professor"
+              />
+            </div>
+            <div class="col-xs-12">
+              <q-input
+                readonly
+                outlined
+                label="Descrição"
+                type="textarea"
+                v-if="patient.treatments[actualTreatment] != undefined"
+                v-model="patient.treatments[actualTreatment].description"
+              />
+            </div>
+            <div class="col-sm-6 col-xs-12">
+              <q-select
+                readonly
+                label="Disciplina"
+                outlined
+                use-input
+                input-debounce="0"
+                :options="disciplines"
+                v-if="patient.treatments[actualTreatment] != undefined"
+                v-model="patient.treatments[actualTreatment].discipline"
+                stack-label
+              >
+                <template v-slot:no-option>
+                  <q-item>
+                    <q-item-section class="text-grey">
+                      Sem resultados
+                    </q-item-section>
+                  </q-item>
+                </template>
+              </q-select>
+            </div>
+            <div class="col-sm-6 col-xs-12">
+              <q-input
+                readonly
+                outlined
+                label="Data do atendimento"
+                mask="date"
+                v-if="patient.treatments[actualTreatment] != undefined"
+                v-model="patient.treatments[actualTreatment].date"
+              >
+                <template v-slot:append>
+                  <q-icon
+                    name="event"
+                    class="cursor-pointer"
+                  >
+                    <q-popup-proxy
+                      ref="qDateProxy"
+                      transition-show="scale"
+                      transition-hide="scale"
+                    >
+                      <q-date
+                        v-model="patient.treatments[actualTreatment].date"
+                        @input="() => $refs.qDateProxy.hide()"
+                      />
+                    </q-popup-proxy>
+                  </q-icon>
+                </template>
+              </q-input>
+            </div>
+          </div>
+        </q-card-section>
+        <q-card-actions align="right">
+          <q-btn
+            flat
+            type="reset"
+            label="Voltar"
+            color="primary"
+            v-close-popup
+          />
+        </q-card-actions>
+        </q-form>
+      </q-card>
+    </q-dialog>
+
+    <q-dialog
       v-model="newExamDialog"
       :maximized="!$q.screen.gt.xs"
       transition-show="slide-up"
@@ -439,6 +551,71 @@
         </q-form>
       </q-card>
     </q-dialog>
+
+    <q-dialog
+      v-model="viewExamDialog"
+      :maximized="!$q.screen.gt.xs"
+      transition-show="slide-up"
+      transition-hide="slide-down"
+    >
+      <q-card>
+        <img id="exam-image">
+        <q-form>
+        <q-card-section>
+          <div class="row q-col-gutter-sm">
+            <div class="col-xs-12">
+              <q-input
+                readonly
+                outlined
+                label="Laudo"
+                type="textarea"
+                v-if="patient.exams[actualExam] != undefined"
+                v-model="patient.exams[actualExam].description"
+              />
+            </div>
+            <div class="col-xs-12">
+              <q-input
+                readonly
+                outlined
+                label="Data do exame"
+                mask="date"
+                v-if="patient.exams[actualExam] != undefined"
+                v-model="patient.exams[actualExam].date"
+              >
+                <template v-slot:append>
+                  <q-icon
+                    name="event"
+                    class="cursor-pointer"
+                  >
+                    <q-popup-proxy
+                      ref="qDateProxy"
+                      transition-show="scale"
+                      transition-hide="scale"
+                    >
+                      <q-date
+                        v-model="patient.exams[actualExam].date"
+                        @input="() => $refs.qDateProxy.hide()"
+                      />
+                    </q-popup-proxy>
+                  </q-icon>
+                </template>
+              </q-input>
+            </div>
+          </div>
+        </q-card-section>
+
+        <q-card-actions align="right">
+          <q-btn
+            type="reset"
+            flat
+            label="Voltar"
+            color="primary"
+            v-close-popup
+          />
+        </q-card-actions>
+        </q-form>
+      </q-card>
+    </q-dialog>
   </q-page>
 </template>
 
@@ -488,6 +665,7 @@ export default {
         exams: []
       },
       newTreatment: {
+        id: '',
         student1: '',
         student2: '',
         professor: '',
@@ -496,6 +674,7 @@ export default {
         date: ''
       },
       newExam: {
+        id: '',
         date: '',
         description: '',
         image: null
@@ -505,10 +684,25 @@ export default {
       editMode: false,
       editButtonText: 'Editar',
       newTreatmentDialog: false,
-      newExamDialog: false
+      viewTreatmentDialog: false,
+      newExamDialog: false,
+      viewExamDialog: false,
+      actualTreatment: 0,
+      actualExam: 0
     }
   },
   methods: {
+    viewTreatment (id) {
+      this.actualTreatment = id
+      this.viewTreatmentDialog = true
+    },
+    viewExam (id) {
+      this.actualExam = id
+      this.viewExamDialog = true
+      storage.ref().child(this.patient.exams[id].path).getDownloadURL().then(url => {
+        document.getElementById('exam-image').src = url
+      })
+    },
     getPatient () {
       console.log(this.$route.params.id)
       db.collection('patients').doc(this.$route.params.id).get().then((doc) => {
@@ -536,16 +730,19 @@ export default {
       this.exitEditMode()
     },
     saveTreatment () {
-      console.log('Tratamento')
+      this.newTreatment.id = this.patient.treatments.length
       db.collection('patients').doc(this.$route.params.id).update({
         treatments: firestore.FieldValue.arrayUnion(this.newTreatment)
+      }).then(() => {
+        this.newTreatment = []
+        this.getPatient()
       })
-      this.getPatient()
     },
     saveExam () {
       const path = uid() + '.jpg'
       db.collection('patients').doc(this.$route.params.id).update({
         exams: firestore.FieldValue.arrayUnion({
+          id: this.patient.exams.length,
           date: this.newExam.date,
           description: this.newExam.description,
           path: path
