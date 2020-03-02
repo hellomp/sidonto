@@ -315,8 +315,8 @@
               <q-input
                 outlined
                 label="Data do atendimento"
-                mask="date"
                 v-model="newTreatment.date"
+                mask="##/##/####"
                 :rules="[ val => val && val.length > 0 || 'Digite a data']"
               >
                 <template v-slot:append>
@@ -331,6 +331,7 @@
                     >
                       <q-date
                         v-model="newTreatment.date"
+                        mask="DD/MM/YYYY"
                         @input="() => $refs.qDateProxy.hide()"
                       />
                     </q-popup-proxy>
@@ -434,7 +435,7 @@
                 readonly
                 outlined
                 label="Data do atendimento"
-                mask="date"
+                mask="##/##/####"
                 v-if="patient.treatments[actualTreatment] != undefined"
                 v-model="patient.treatments[actualTreatment].date"
               >
@@ -449,6 +450,7 @@
                       transition-hide="scale"
                     >
                       <q-date
+                        mask="DD/MM/YYYY"
                         v-model="patient.treatments[actualTreatment].date"
                         @input="() => $refs.qDateProxy.hide()"
                       />
@@ -508,8 +510,8 @@
               <q-input
                 outlined
                 label="Data do exame"
-                mask="date"
                 v-model="newExam.date"
+                mask="##/##/####"
               >
                 <template v-slot:append>
                   <q-icon
@@ -523,6 +525,7 @@
                     >
                       <q-date
                         v-model="newExam.date"
+                        mask="DD/MM/YYYY"
                         @input="() => $refs.qDateProxy.hide()"
                       />
                     </q-popup-proxy>
@@ -579,7 +582,7 @@
                 readonly
                 outlined
                 label="Data do exame"
-                mask="date"
+                mask="##/##/####"
                 v-if="patient.exams[actualExam] != undefined"
                 v-model="patient.exams[actualExam].date"
               >
@@ -595,6 +598,7 @@
                     >
                       <q-date
                         v-model="patient.exams[actualExam].date"
+                        mask="DD/MM/YYYY"
                         @input="() => $refs.qDateProxy.hide()"
                       />
                     </q-popup-proxy>
