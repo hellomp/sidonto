@@ -664,7 +664,6 @@ export default {
   name: 'ViewPatient',
   data () {
     return {
-      value: true,
       patient: {
         treatments: [],
         exams: []

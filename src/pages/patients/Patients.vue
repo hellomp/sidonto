@@ -1,7 +1,7 @@
 <template>
   <q-page padding>
     <q-card class="table-card">
-    <q-table :data="patients" :columns="columns" row-key="id" :filter="search" flat>
+    <q-table :data="patients" :columns="columns" row-key="id" :filter="search" :pagination.sync="pagination" flat>
       <template v-slot:header-cell-onTreatment="props">
         <q-th :props="props" style="padding: 0; width: 10px">
         </q-th>
@@ -85,7 +85,10 @@ export default {
           align: 'left',
           style: 'width: 10px; padding: 0px'
         }
-      ]
+      ],
+      pagination: {
+        rowsPerPage: 20
+      }
     }
   },
   methods: {
