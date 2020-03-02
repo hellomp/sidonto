@@ -82,7 +82,7 @@ export default {
     width: 100%;
     margin: 0 1rem;
   }
-@media only screen and (max-width: 768px) {
+@media only screen and (max-width: 900px) {
   .q-page-container{
     width: 100%;
     margin: 0;
