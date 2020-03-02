@@ -545,11 +545,11 @@
             v-close-popup
           />
           <q-btn
+            :disable="uploading"
             type="submit"
             flat
             label="Salvar"
             color="primary"
-            v-close-popup
           />
         </q-card-actions>
         </q-form>
@@ -692,7 +692,8 @@ export default {
       newExamDialog: false,
       viewExamDialog: false,
       actualTreatment: 0,
-      actualExam: 0
+      actualExam: 0,
+      uploading: false
     }
   },
   methods: {
@@ -744,19 +745,23 @@ export default {
       })
     },
     saveExam () {
+      this.uploading = true
       const path = uid() + '.jpg'
-      db.collection('patients').doc(this.$route.params.id).update({
-        exams: firestore.FieldValue.arrayUnion({
-          id: this.patient.exams.length,
-          date: this.newExam.date,
-          description: this.newExam.description,
-          path: path
-        })
-      })
       storage.ref().child(path).put(this.newExam.image)
         .then(snapshot => {
           console.log('Image uploaded')
-          this.getPatient()
+          db.collection('patients').doc(this.$route.params.id).update({
+            exams: firestore.FieldValue.arrayUnion({
+              id: this.patient.exams.length,
+              date: this.newExam.date,
+              description: this.newExam.description,
+              path: path
+            })
+          }).then(() => {
+            this.newExamDialog = false
+            this.uploading = false
+            this.getPatient()
+          })
         })
     },
     enterEditMode () {
