@@ -2,6 +2,10 @@
   <q-page padding>
     <q-card class="table-card">
     <q-table :data="patients" :columns="columns" row-key="id" :filter="search" flat>
+      <template v-slot:header-cell-onTreatment="props">
+        <q-th :props="props" style="padding: 5px; width: 10px">
+        </q-th>
+      </template>
       <template v-slot:body="props">
         <q-tr @click.native="showPatient(props.row.id)" :props="props">
           <q-td key="record" :props="props">{{props.row.record}}</q-td>
@@ -30,6 +34,8 @@
               {{props.row.necessity[2]}}
             </q-badge>
           </q-td>
+          <q-td key="onTreatment" style="background: #1976D2" :props="props" v-if="props.row.onTreatment"></q-td>
+          <q-td key="onTreatment" style="background: #FFFFFF" :props="props" v-else></q-td>
         </q-tr>
       </template>
     </q-table>
@@ -70,6 +76,14 @@ export default {
           field: 'necessity',
           sortable: true,
           align: 'right'
+        },
+        {
+          name: 'onTreatment',
+          label: '',
+          field: 'onTreatment',
+          sortable: true,
+          align: 'left',
+          style: 'width: 10px; padding: 0px'
         }
       ]
     }
@@ -101,7 +115,8 @@ export default {
             id: doc.id,
             name: doc.data().name,
             necessity: doc.data().necessity,
-            record: doc.data().record
+            record: doc.data().record,
+            onTreatment: doc.data().onTreatment
           })
           this.patients = patients
         })
