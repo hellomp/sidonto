@@ -71,7 +71,8 @@ module.exports = function (ctx) {
         'QDialog',
         'QFile',
         'QDate',
-        'QToggle'
+        'QToggle',
+        'QBadge'
       ],
 
       directives: [
