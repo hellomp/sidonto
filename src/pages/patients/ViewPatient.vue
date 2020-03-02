@@ -153,10 +153,11 @@
     <q-card class=" q-mt-md">
       <q-item tag="label" v-ripple>
         <q-item-section>
-          <q-item-label>Em tratamento</q-item-label>
+          <q-item-label v-if="patient.onTreatment">Em tratamento</q-item-label>
+          <q-item-label v-else>Em espera</q-item-label>
         </q-item-section>
         <q-item-section avatar>
-          <q-toggle disable color="blue" v-model="value"/>
+          <q-toggle :disable="!editMode" color="blue" v-model="patient.onTreatment"/>
         </q-item-section>
       </q-item>
     </q-card>
@@ -725,7 +726,8 @@ export default {
         phone2: this.patient.phone2,
         birthDate: this.patient.birthDate,
         necessity: this.patient.necessity,
-        motive: this.patient.motive
+        motive: this.patient.motive,
+        onTreatment: this.patient.onTreatment
       })
       this.exitEditMode()
     },

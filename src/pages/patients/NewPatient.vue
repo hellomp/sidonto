@@ -188,7 +188,8 @@ export default {
             necessity: this.newPatient.necessity,
             motive: this.newPatient.motive,
             treatments: [],
-            exams: []
+            exams: [],
+            onTreatment: false
           })
             .then(function (docRef) {
               console.log('Document written with ID: ', docRef.id)
