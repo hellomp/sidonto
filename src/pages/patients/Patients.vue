@@ -3,7 +3,7 @@
     <q-card class="table-card">
     <q-table :data="patients" :columns="columns" row-key="id" :filter="search" flat>
       <template v-slot:header-cell-onTreatment="props">
-        <q-th :props="props" style="padding: 5px; width: 10px">
+        <q-th :props="props" style="padding: 0; width: 10px">
         </q-th>
       </template>
       <template v-slot:body="props">
@@ -81,7 +81,7 @@ export default {
           name: 'onTreatment',
           label: '',
           field: 'onTreatment',
-          sortable: true,
+          sortable: false,
           align: 'left',
           style: 'width: 10px; padding: 0px'
         }
