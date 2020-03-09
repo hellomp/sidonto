@@ -563,7 +563,7 @@
       transition-hide="slide-down"
     >
       <q-card>
-        <img id="exam-image">
+          <img id="exam-image" v-viewer="viewerOptions">
         <q-form>
         <q-card-section>
           <div class="row q-col-gutter-sm">
@@ -628,6 +628,7 @@
 import { db, storage } from 'boot/firebase'
 import { firestore } from 'firebase'
 import { uid } from 'quasar'
+import imageCompression from 'browser-image-compression'
 
 const stringDisciplines = [
   'Estágio I',
@@ -682,6 +683,12 @@ export default {
         date: '',
         description: '',
         image: null
+      },
+      viewerOptions: {
+        zIndex: 6001,
+        navbar: false,
+        title: false,
+        toolbar: false
       },
       disciplines: stringDisciplines,
       motives: stringMotives,
@@ -745,23 +752,37 @@ export default {
       })
     },
     saveExam () {
+      const options = {
+        maxSizeMB: 1,
+        maxWidthOrHeight: 1920,
+        useWebWorker: true
+      }
       this.uploading = true
       const path = uid() + '.jpg'
-      storage.ref().child(path).put(this.newExam.image)
-        .then(snapshot => {
-          console.log('Image uploaded')
-          db.collection('patients').doc(this.$route.params.id).update({
-            exams: firestore.FieldValue.arrayUnion({
-              id: this.patient.exams.length,
-              date: this.newExam.date,
-              description: this.newExam.description,
-              path: path
+      // Compress image
+      imageCompression(this.newExam.image, options)
+        .then(compressedImage => {
+          // Upload image to storage
+          storage.ref().child(path).put(compressedImage)
+            .then(snapshot => {
+              console.log('Image uploaded')
+              // Reference image path on database
+              db.collection('patients').doc(this.$route.params.id).update({
+                exams: firestore.FieldValue.arrayUnion({
+                  id: this.patient.exams.length,
+                  date: this.newExam.date,
+                  description: this.newExam.description,
+                  path: path
+                })
+              }).then(() => {
+                this.newExamDialog = false
+                this.uploading = false
+                this.getPatient()
+              })
             })
-          }).then(() => {
-            this.newExamDialog = false
-            this.uploading = false
-            this.getPatient()
-          })
+        })
+        .catch(error => {
+          console.log(error.message)
         })
     },
     enterEditMode () {
@@ -796,5 +817,8 @@ export default {
 }
 .q-card{
   border-radius: 10px;
+}
+.viewer-container{
+  z-index: 6001 !important;
 }
 </style>

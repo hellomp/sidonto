@@ -59,7 +59,7 @@ export default {
           name: 'record',
           label: 'N°',
           field: 'record',
-          sortable: true,
+          sortable: false,
           align: 'left',
           style: 'width: 50px'
         },
@@ -67,14 +67,14 @@ export default {
           name: 'name',
           label: 'Nome',
           field: 'name',
-          sortable: true,
+          sortable: false,
           align: 'left'
         },
         {
           name: 'necessity',
           label: 'Necessidade',
           field: 'necessity',
-          sortable: true,
+          sortable: false,
           align: 'right'
         },
         {
