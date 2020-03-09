@@ -169,7 +169,7 @@
       >
         <thead>
            <tr>
-            <th colspan="3">
+            <th colspan="4">
              <div class="row no-wrap items-center justify-between">
                 <h6 class="q-mb-sm q-mt-sm">Atendimentos</h6>
                 <q-btn
@@ -184,12 +184,13 @@
           <tr>
             <th class="text-left">Disciplina</th>
             <th class="text-left">Alunos</th>
+            <th class="text-left">Resumo</th>
             <th class="text-right">Data do atendimento</th>
           </tr>
         </thead>
         <tbody>
           <tr v-if="patient.treatments.length == 0">
-              <td colspan="3">
+              <td colspan="4">
                 <div class="row items-center justify-center">
                   Nenhum atendimento cadastrado
                 </div>
@@ -198,6 +199,7 @@
             <tr v-else v-for="treatment in patient.treatments" v-bind:key="treatment.id" @click="viewTreatment(treatment.id)">
               <td class="text-left">{{treatment.discipline}}</td>
               <td class="text-left">{{treatment.student1}}/{{treatment.student2}}</td>
+              <td class="text-left">{{treatment.description.substr(0, 40) + "..."}}</td>
               <td class="text-right">{{treatment.date}}</td>
            </tr>
         </tbody>
@@ -563,7 +565,7 @@
       transition-hide="slide-down"
     >
       <q-card>
-          <img id="exam-image" v-viewer="viewerOptions">
+        <img id="exam-image" v-viewer="viewerOptions">
         <q-form>
         <q-card-section>
           <div class="row q-col-gutter-sm">
