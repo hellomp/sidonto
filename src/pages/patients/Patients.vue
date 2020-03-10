@@ -10,28 +10,9 @@
         <q-tr @click.native="showPatient(props.row.id)" :props="props">
           <q-td key="record" :props="props">{{props.row.record}}</q-td>
           <q-td key="name" :props="props">{{props.row.name}}</q-td>
-          <q-td key="necessity" v-if="props.row.necessity.length == 1" :props="props">
-            <q-badge color="green">
-              {{props.row.necessity[0]}}
-            </q-badge>
-          </q-td>
-          <q-td key="necessity" v-else-if="props.row.necessity.length == 2" :props="props">
-            <q-badge color="green" class="q-mr-sm">
-              {{props.row.necessity[0]}}
-            </q-badge>
-            <q-badge color="green">
-              {{props.row.necessity[1]}}
-            </q-badge>
-          </q-td>
-          <q-td key="necessity" v-else-if="props.row.necessity.length == 3" :props="props">
-            <q-badge color="green" class="q-mr-sm">
-              {{props.row.necessity[0]}}
-            </q-badge>
-            <q-badge color="green" class="q-mr-sm">
-              {{props.row.necessity[1]}}
-            </q-badge>
-            <q-badge color="green">
-              {{props.row.necessity[2]}}
+          <q-td key="necessity" :props="props">
+            <q-badge color="green" class="q-ml-sm" v-for="necessity in props.row.necessity" :key="necessity">
+              {{necessity}}
             </q-badge>
           </q-td>
           <q-td key="onTreatment" style="background: #1976D2" :props="props" v-if="props.row.onTreatment"></q-td>
