@@ -14,7 +14,7 @@
   "dependencies": {
     "@quasar/extras": "^1.0.0",
     "browser-image-compression": "^1.0.6",
-    "firebase": "^7.9.3",
+    "firebase": "^10.9.0",
     "quasar": "^1.0.0",
     "v-viewer": "^1.5.1"
   },
